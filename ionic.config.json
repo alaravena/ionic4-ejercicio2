@@ -1,0 +1,7 @@
+{
+  "name": "ionic4-ejercicio2",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-header>
+    <app-encabezado [pageTitle]="tituloPagina" ></app-encabezado>
+  </ion-header>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <img [src]="personaje.avatar" />
+    <ion-card-header>
+      <ion-card-subtitle>{{personaje.last_name}}</ion-card-subtitle>
+      <ion-card-title>{{personaje.first_name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Mas información en
+      <i>{{personaje.email}}</i>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
