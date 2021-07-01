@@ -62,7 +62,7 @@ export class HomePage {
           text: 'Agregar',
           handler: (data) => {
             console.log('Confirm Ok');
-            this.agregarUsuario(data.name, data.job)
+            this.agregarUsuario(data);
 
           }
         }
@@ -72,13 +72,17 @@ export class HomePage {
     await alert.present();
   }
 
-  agregarUsuario(name: string, job: string) {
-    let usuario = {
-      'name': name,
-      'job': job
-    }
-    console.log(usuario)
-  }
+  agregarUsuario(usuario) {
+    this.usuariosService.crearUsuario(usuario)
+      .then(respuesta => {
+        console.log(respuesta);
+          alert(`Se creó correctamente el usuario ${respuesta.name}`);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  };
 
   gotoDetalles(personaje: any) {
     const navigationExtras: NavigationExtras = {
