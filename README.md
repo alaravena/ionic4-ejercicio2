@@ -204,12 +204,30 @@ async mostrarAlertaAgregar() {
           text: 'Agregar',
           handler: (data) => {
             console.log('Confirm Ok');
-            this.agregarUsuario(data.name, data.job)
+            this.agregarUsuario(data)
           }
         }
       ]
     });
 ```
+
+Finalmente el, agregamos el usuario con el servicio:
+
+```ts
+agregarUsuario(usuario) {
+    this.usuariosService.crearUsuario(usuario)
+      .then(respuesta => {
+        console.log(respuesta);
+          alert(`Se creó correctamente el usuario ${respuesta.name}`);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  };
+```
+
+Lo que se debe hacer cuando responde el servicio depende de lo que se quiera hacer. Se puede pushar la respuesta al listado (en esta caso no se puede porque no son los mismos parámetros) o llamar nuevamente a la función de listado, entre otras formas.
 
 ### 5 Agregar función para editar
 
