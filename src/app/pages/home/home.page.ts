@@ -84,6 +84,61 @@ export class HomePage {
     );
   };
 
+  async mostrarAlertaEditar(usuario) {
+    const alert = await this.alertController.create({
+      header: 'Editar Usuario',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: usuario.first_name,
+          placeholder: 'Nombre'
+        },
+        {
+          name: 'job',
+          type: 'text',
+          value: usuario.last_name,
+          placeholder: 'Trabajo'
+        },
+        {
+          name: 'id',
+          type: 'text',
+          value: usuario.id,
+          placeholder: 'Id'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Editar',
+          handler: (data) => {
+            console.log('Confirm Ok');
+            this.editarUsuario(data);
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  editarUsuario(usuario) {
+      this.usuariosService.actualizarUsuario(usuario.id, usuario)
+        .then(respuesta => {
+            console.log(respuesta);
+            alert(`Se actualizó correctamente el usuario ${respuesta.name}`);
+        }, (error) => { console.error(error); }
+      );
+  }
+
+
   gotoDetalles(personaje: any) {
     const navigationExtras: NavigationExtras = {
       queryParams: {

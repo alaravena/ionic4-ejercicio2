@@ -231,4 +231,104 @@ Lo que se debe hacer cuando responde el servicio depende de lo que se quiera hac
 
 ### 5 Agregar función para editar
 
+En el servicio, usaremos PUT para la función editar:
+
+```ts
+actualizarUsuario(idUsuario: number, usuario: any): Promise <any> {
+    return new Promise ((resolve, reject) => {
+        this.httpClient.put(this.urlBase + idUsuario, usuario)
+        .subscribe(res => {
+            resolve(res);
+        }, (err) => {
+            reject(err);
+        });
+    });
+  };
+```
+
+Para la interfaz de usuario, usaremos el gesto de slide para un item de lista. Con esto podemos poner varios botones deslizando a la derecha (start) o a la izquierda (end). Dejaremos también listo el html para el eliminar, por lo que nuestra lista queda ahora asi:
+
+```html
+<ion-list *ngIf="listaPersonajes">
+
+    <ion-item-sliding *ngFor='let personaje of listaPersonajes'>
+      <ion-item-options side="start">
+        <ion-item-option (click)="mostrarAlertaEditar(personaje)">Editar</ion-item-option>
+      </ion-item-options>
+  
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]='personaje.avatar'>
+        </ion-avatar>
+        <ion-label>
+            <h2>{{ personaje.first_name }}</h2>
+            <h3>{{ personaje.last_name }}</h3>
+        </ion-label>
+        <ion-icon class="ff" name="arrow-forward" (click)="gotoDetalles(personaje)"></ion-icon>  
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="mostrarAlertaEliminar(personaje)">Eliminar</ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+  </ion-list>
+```
+
+Ahora creamos la función que muestra la alerta pero con lon inputs ya rellenados. A modo de ejemplo, en vez de job, como es un campo que no tenemos, usaremos el last_name
+
+```ts
+async mostrarAlertaEditar(persona) {
+    const alert = await this.alertController.create({
+      header: 'Editar Usuario',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: persona.first_name,
+          placeholder: 'Nombre'
+        },
+        {
+          name: 'job',
+          type: 'text',
+          value: persona.last_name,
+          placeholder: 'Trabajo'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Editar',
+          handler: (data) => {
+            console.log('Confirm Ok');
+            this.agregarUsuario(data);
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+```
+
+Y ahora consumir el servicio:
+
+```ts
+editarUsuario(usuario) {
+      this.usuariosService.actualizarUsuario(usuario.id, usuario)
+        .then(respuesta => {
+            console.log(respuesta);
+            alert(`Se actualizó correctamente el usuario ${respuesta.name}`);
+        }, (error) => { console.error(error); }
+      );
+  }
+```
+
 ### 6 Agregar función para eliminar
